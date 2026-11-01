@@ -1,0 +1,4 @@
+external_id,date,customer,department,amount,currency,description
+sample-revenue-001,2026-10-15,Asteron Manufacturing,Field Services,12500.00,USD,Illustrative service revenue
+sample-revenue-002,2026-10-19,Bluepeak Energy,Engineering,18750.00,USD,Illustrative recognized project work
+sample-refund-001,2026-10-21,Cedarline Foods,Managed Operations,-450.00,USD,Illustrative customer credit

@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        VITE_API_URL: ""
+    image: vantage-iq:local
+    restart: unless-stopped
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    environment:
+      APP_ENV: "${APP_ENV:-development}"
+      DEMO_MODE: "${DEMO_MODE:-true}"
+      ALLOW_REGISTRATION: "${ALLOW_REGISTRATION:-false}"
+      DATABASE_URL: "${DATABASE_URL:-sqlite:////data/vantage_iq.db}"
+      SECRET_KEY: "${SECRET_KEY:-}"
+      SESSION_COOKIE_SECURE: "${SESSION_COOKIE_SECURE:-false}"
+      SESSION_COOKIE_NAME: "${SESSION_COOKIE_NAME:-vantage_session}"
+      SESSION_TTL_HOURS: "${SESSION_TTL_HOURS:-12}"
+      AUTH_ACTION_TOKEN_TTL_MINUTES: "${AUTH_ACTION_TOKEN_TTL_MINUTES:-60}"
+      AUTO_MIGRATE: "${AUTO_MIGRATE:-true}"
+      UPLOAD_MAX_BYTES: "${UPLOAD_MAX_BYTES:-5242880}"
+      CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost:8080}"
+      PUBLIC_APP_URL: "${PUBLIC_APP_URL:-http://localhost:8080}"
+      TRUSTED_HOSTS: "${TRUSTED_HOSTS:-localhost,127.0.0.1}"
+      DATABASE_SSL_CA: "${DATABASE_SSL_CA:-}"
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_USERNAME: "${SMTP_USERNAME:-}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD:-}"
+      SMTP_FROM_ADDRESS: "${SMTP_FROM_ADDRESS:-}"
+      SMTP_STARTTLS: "${SMTP_STARTTLS:-true}"
+      FORWARDED_ALLOW_IPS: "${FORWARDED_ALLOW_IPS:-127.0.0.1}"
+      WEB_CONCURRENCY: "${WEB_CONCURRENCY:-1}"
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${HOST_PORT:-8080}:8000"
+    volumes:
+      - vantage_data:/data
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import os, urllib.request; request=urllib.request.Request('http://127.0.0.1:8000/api/v1/ready', headers={'Host': os.environ['TRUSTED_HOSTS'].split(',')[0].strip()}); urllib.request.urlopen(request, timeout=3)"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  vantage_data:

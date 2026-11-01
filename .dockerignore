@@ -1,0 +1,13 @@
+.git
+.venv
+__pycache__
+*.py[cod]
+*.db
+.pytest_cache
+coverage
+node_modules
+frontend/node_modules
+frontend/dist
+frontend/.env*
+.env
+.DS_Store

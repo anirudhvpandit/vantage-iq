@@ -1,0 +1,20 @@
+services:
+  app:
+    environment:
+      APP_ENV: production
+      DEMO_MODE: "false"
+      SESSION_COOKIE_SECURE: "true"
+      DATABASE_URL: "${DATABASE_URL:?Set DATABASE_URL to the production MySQL connection}"
+      DATABASE_SSL_CA: /run/secrets/mysql-ca.pem
+      SECRET_KEY: "${SECRET_KEY:?Set SECRET_KEY to a secret of at least 32 bytes}"
+      CORS_ORIGINS: "${CORS_ORIGINS:?Set CORS_ORIGINS to your HTTPS application origin}"
+      PUBLIC_APP_URL: "${PUBLIC_APP_URL:?Set PUBLIC_APP_URL to your HTTPS application origin}"
+      TRUSTED_HOSTS: "${TRUSTED_HOSTS:?Set TRUSTED_HOSTS to your application hostnames plus localhost}"
+      SMTP_HOST: "${SMTP_HOST:?Set SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_USERNAME: "${SMTP_USERNAME:-}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD:-}"
+      SMTP_FROM_ADDRESS: "${SMTP_FROM_ADDRESS:?Set SMTP_FROM_ADDRESS}"
+      SMTP_STARTTLS: "true"
+    volumes:
+      - "${DATABASE_SSL_CA_HOST_PATH:?Set DATABASE_SSL_CA_HOST_PATH to the MySQL CA file}:/run/secrets/mysql-ca.pem:ro"
